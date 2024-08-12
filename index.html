@@ -105,6 +105,7 @@
                 <th>Genre</th>
                 <th>Description</th>
                 <th>Petit mot spécial</th>
+                <th>Image</th> <!-- Ajoutez une colonne pour les images -->
             </tr>
         </thead>
         <tbody>
@@ -117,7 +118,7 @@
         const API_KEY = 'AIzaSyCbuRQn0OGJHzUzDMjgyVqPxJQlfVDfKLU'; // Remplacez par votre clé API
 
         function fetchData() {
-            const range = 'Sheet1!B:F'; // Ajustez en fonction de votre plage de données
+            const range = 'Sheet1!B:G'; // Ajustez en fonction de votre plage de données, incluant la colonne des images
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`;
 
             fetch(url)
@@ -131,7 +132,15 @@
                         const tr = document.createElement('tr');
                         row.forEach((cell, index) => {
                             const td = document.createElement('td');
-                            td.textContent = cell || ''; // Définit un texte vide si cell est undefined
+                            if (index === row.length - 1 && cell) { // Si c'est la colonne des images
+                                const img = document.createElement('img');
+                                img.src = cell; // Utilisez l'URL d'image
+                                img.alt = 'Image'; // Description de l'image
+                                img.style.maxWidth = '100px'; // Ajustez la taille de l'image
+                                td.appendChild(img);
+                            } else {
+                                td.textContent = cell || ''; // Définit un texte vide si cell est undefined
+                            }
                             tr.appendChild(td);
 
                             // Débogage : afficher le contenu des cellules
