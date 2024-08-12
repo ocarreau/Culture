@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bibliothèque interactive des coquinettes de bobettes</title>
     <style>
-        
         body {
             background-color: #cfc8f4;
             font-family: 'Times New Roman', Times, serif, sans-serif;
@@ -14,43 +13,49 @@
         }
 
         .banniere {
-            background-image: url("c:\Users\ocean\Downloads\pexels-anniroenkae-2832382.jpg");
+            background-image: url("c:\\Users\\ocean\\Downloads\\pexels-anniroenkae-2832382.jpg");
+            background-size: cover;
+            padding: 20px;
         }
 
         .header-image {
-            
-            height: auto; /* Maintient les proportions de l'image */
-            margin-bottom: 20px; /* Espace entre l'image et le tableau */
+            height: auto;
+            margin-bottom: 20px;
             width: 90px;
             text-align: center;
         }
 
         img {
-            display: block; /* L'image est traitée comme un bloc */
-            margin: 0 auto; /* Centre horizontalement l'image */
-            max-width: 100%; /* Assure que l'image ne dépasse pas le conteneur */
-            height: auto; /* Maintient les proportions de l'image */
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
         }
 
         .container {
             margin: 0 auto;
             text-align: center;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
+
         th, td {
             padding: 10px;
             border: 1px solid #ddd;
         }
+
         th {
             background-color: #f4f4f4;
         }
+
         .filter {
             margin-bottom: 20px;
         }
+
         h1 {
             text-align: center;
             font-size: 2.5em;
@@ -59,23 +64,38 @@
 </head>
 <body>
     <div class="banniere">
-    <h1>Bibliothèque des coquinettes de bobettes</h1>
-    <div class="container"></div>
-    <img src="flower_4499709.png" alt="Description de l'image" class="header-image">
+        <h1>Bibliothèque des coquinettes de bobettes</h1>
+        <div class="container">
+            <img src="flower_4499709.png" alt="Description de l'image" class="header-image">
+        </div>
     </div>
+
     <div class="filter">
         <label for="categoryFilter">Filtrer par catégorie:</label>
         <select id="categoryFilter">
             <option value="">Tous</option>
-            <option value="Livre">Autre</option>
             <option value="Film">Film</option>
             <option value="Série">Série</option>
             <option value="Podcast">Podcast-Balado</option>
-            <option value="Podcast">Livre 100% mots</option>
-            <option value="Autre">Livre illustré</option>
-            <option value="Livre">Autre</option>
+            <option value="Livre 100% mots">Livre 100% mots</option>
+            <option value="Livre illustré">Livre illustré</option>
+            <option value="Autre">Autre</option>
+        </select>
+
+        <label for="genreFilter">Filtrer par genre:</label>
+        <select id="genreFilter">
+            <option value="">Tous</option>
+            <option value="Romance">Romance</option>
+            <option value="Engagé">Engagé</option>
+            <option value="Science-fiction">Science-fiction</option>
+            <option value="Drame">Drame</option>
+            <option value="Documentaire">Documentaire</option>
+            <option value="Thriller-policier">Thriller-policier</option>
+            <option value="Fantastique">Fantastique</option>
+            <option value="Comédie">Comédie</option>
         </select>
     </div>
+
     <table id="dataTable">
         <thead>
             <tr>
@@ -86,7 +106,6 @@
                 <th>Petit mot spécial</th>
             </tr>
         </thead>
-    </div>
         <tbody>
             <!-- Les données seront insérées ici -->
         </tbody>
@@ -109,10 +128,13 @@
 
                     rows.forEach(row => {
                         const tr = document.createElement('tr');
-                        row.forEach(cell => {
+                        row.forEach((cell, index) => {
                             const td = document.createElement('td');
-                            td.textContent = cell;
+                            td.textContent = cell || ''; // Définit un texte vide si cell est undefined
                             tr.appendChild(td);
+
+                            // Débogage : afficher le contenu des cellules
+                            console.log(`Colonne ${index}: ${cell}`);
                         });
                         tbody.appendChild(tr);
                     });
@@ -123,20 +145,29 @@
         }
 
         function applyFilter() {
-            const filterValue = document.querySelector('#categoryFilter').value.toLowerCase();
+            const categoryFilterValue = document.querySelector('#categoryFilter').value.toLowerCase();
+            const genreFilterValue = document.querySelector('#genreFilter').value.toLowerCase();
             const rows = document.querySelectorAll('#dataTable tbody tr');
 
             rows.forEach(row => {
-                const categoryCell = row.cells[1].textContent.toLowerCase();
-                row.style.display = filterValue === '' || categoryCell === filterValue ? '' : 'none';
+                const categoryCell = row.cells[0] ? row.cells[0].textContent.toLowerCase() : '';
+                const genreCell = row.cells[2] ? row.cells[2].textContent.toLowerCase() : '';
+
+                // Débogage : afficher les valeurs filtrées pour vérifier
+                console.log(`Filtrage: Catégorie=${categoryFilterValue}, Genre=${genreFilterValue}`);
+                console.log(`Valeurs Cellule: Catégorie=${categoryCell}, Genre=${genreCell}`);
+                
+                row.style.display = (categoryFilterValue === '' || categoryCell === categoryFilterValue) &&
+                                    (genreFilterValue === '' || genreCell === genreFilterValue) ? '' : 'none';
             });
         }
 
         document.querySelector('#categoryFilter').addEventListener('change', applyFilter);
+        document.querySelector('#genreFilter').addEventListener('change', applyFilter);
 
         fetchData(); // Charger les données au chargement de la page
 
-        setInterval(fetchData, 60000);
+        setInterval(fetchData, 60000); // Recharger les données toutes les minutes
     </script>
 </body>
 </html>
