@@ -132,7 +132,7 @@
                         const tr = document.createElement('tr');
                         row.forEach((cell, index) => {
                             const td = document.createElement('td');
-                            if (index === row.length - 1 && cell) { // Si c'est la colonne des images
+                            if (index === row.length - 1 && cell && isImageUrl(cell)) { // Si c'est la colonne des images et l'URL est valide
                                 const img = document.createElement('img');
                                 img.src = cell; // Utilisez l'URL d'image
                                 img.alt = 'Image'; // Description de l'image
@@ -152,6 +152,10 @@
                     applyFilter(); // Applique le filtre après avoir chargé les données
                 })
                 .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function isImageUrl(url) {
+            return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
         }
 
         function applyFilter() {
