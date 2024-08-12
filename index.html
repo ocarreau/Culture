@@ -105,7 +105,7 @@
                 <th>Genre</th>
                 <th>Description</th>
                 <th>Petit mot spécial</th>
-                <th>Image</th> <!-- Ajoutez une colonne pour les images -->
+                <th>Illustration</th> <!-- Colonne pour les images -->
             </tr>
         </thead>
         <tbody>
@@ -118,13 +118,13 @@
         const API_KEY = 'AIzaSyCbuRQn0OGJHzUzDMjgyVqPxJQlfVDfKLU'; // Remplacez par votre clé API
 
         function fetchData() {
-            const range = 'Sheet1!B:G'; // Ajustez en fonction de votre plage de données, incluant la colonne des images
+            const range = 'Sheet1!B:G'; // Plage incluant la colonne des images
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`;
 
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    const rows = data.values.slice(1); // Enlevez l'en-tête
+                    const rows = data.values.slice(1); // Enlever l'en-tête
                     const tbody = document.querySelector('#dataTable tbody');
                     tbody.innerHTML = '';
 
@@ -132,30 +132,28 @@
                         const tr = document.createElement('tr');
                         row.forEach((cell, index) => {
                             const td = document.createElement('td');
-                            if (index === row.length - 1 && cell && isImageUrl(cell)) { // Si c'est la colonne des images et l'URL est valide
+                            if (index === row.length - 1 && cell && isImageUrl(cell)) { // Dernière colonne pour les images
                                 const img = document.createElement('img');
-                                img.src = cell; // Utilisez l'URL d'image
+                                img.src = cell; // URL de l'image
                                 img.alt = 'Image'; // Description de l'image
-                                img.style.maxWidth = '100px'; // Ajustez la taille de l'image
+                                img.style.maxWidth = '100px'; // Ajuster la taille
+                                img.style.height = 'auto'; // Garder les proportions
                                 td.appendChild(img);
                             } else {
-                                td.textContent = cell || ''; // Définit un texte vide si cell est undefined
+                                td.textContent = cell || ''; // Afficher le texte
                             }
                             tr.appendChild(td);
-
-                            // Débogage : afficher le contenu des cellules
-                            console.log(`Colonne ${index}: ${cell}`);
                         });
                         tbody.appendChild(tr);
                     });
 
-                    applyFilter(); // Applique le filtre après avoir chargé les données
+                    applyFilter(); // Appliquer le filtre après le chargement des données
                 })
                 .catch(error => console.error('Error fetching data:', error));
         }
 
         function isImageUrl(url) {
-            return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+            return (url.match(/\.(jpeg|jpg|gif|png)$/i) != null);
         }
 
         function applyFilter() {
@@ -167,10 +165,6 @@
                 const categoryCell = row.cells[0] ? row.cells[0].textContent.toLowerCase() : '';
                 const genreCell = row.cells[2] ? row.cells[2].textContent.toLowerCase() : '';
 
-                // Débogage : afficher les valeurs filtrées pour vérifier
-                console.log(`Filtrage: Catégorie=${categoryFilterValue}, Genre=${genreFilterValue}`);
-                console.log(`Valeurs Cellule: Catégorie=${categoryCell}, Genre=${genreCell}`);
-                
                 row.style.display = (categoryFilterValue === '' || categoryCell === categoryFilterValue) &&
                                     (genreFilterValue === '' || genreCell === genreFilterValue) ? '' : 'none';
             });
