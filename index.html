@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bibliothèque interactive des coquinettes de bobettes</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bungee+Tint&family=Dongle&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dongle&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
         body {
-            background-color: #cfc8f4;
-            font-family: 'Times New Roman', Times, serif, sans-serif;
+            background-color: #f3f3ec;
+            font-family: Dongle;
             margin: 20px;
             justify-content: center;
         }
@@ -44,12 +46,14 @@
         }
 
         th, td {
-            padding: 10px;
+            padding: 20px;
             border: 1px solid #ddd;
         }
 
         th {
             background-color: #f4f4f4;
+            font-size: 20px;
+            color :rgb(59, 49, 158)
         }
 
         .filter {
@@ -59,7 +63,15 @@
         h1 {
             text-align: center;
             font-size: 2.5em;
+            font-family: Bungee;
+            color: rgb(59, 49, 158);
         }
+        
+        tr { 
+            font-size: 20px;
+        }
+
+        
     </style>
 </head>
 <body>
@@ -94,6 +106,7 @@
             <option value="Fantastique">Fantastique</option>
             <option value="Comédie">Comédie</option>
             <option value="Feel-good">Feel-good</option>
+            <option value="Queer">Queer</option>
         </select>
     </div>
 
@@ -102,6 +115,7 @@
             <tr>
                 <th>Catégorie</th>
                 <th>Titre</th>
+                <th>Autrice-auteur-réalisation</th>
                 <th>Genre</th>
                 <th>Description</th>
                 <th>Petit mot spécial</th>
@@ -118,7 +132,7 @@
         const API_KEY = 'AIzaSyCbuRQn0OGJHzUzDMjgyVqPxJQlfVDfKLU'; // Remplacez par votre clé API
 
         function fetchData() {
-            const range = 'Sheet1!B:G'; // Plage incluant la colonne des images
+            const range = 'Sheet1!B:H'; // Plage incluant la colonne des images
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`;
 
             fetch(url)
@@ -136,7 +150,7 @@
                                 const img = document.createElement('img');
                                 img.src = cell; // URL de l'image
                                 img.alt = 'Image'; // Description de l'image
-                                img.style.maxWidth = '100px'; // Ajuster la taille
+                                img.style.maxWidth = '150px'; // Ajuster la taille
                                 img.style.height = 'auto'; // Garder les proportions
                                 td.appendChild(img);
                             } else {
