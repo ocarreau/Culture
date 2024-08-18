@@ -6,32 +6,26 @@
     <title>Bibliothèque interactive des coquinettes de bobettes</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bungee+Tint&family=Dongle&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Dongle&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
         body {
             background-color: #f3f3ec;
             font-family: Dongle;
             margin: 20px;
-            justify-content: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .banniere {
             background-image: url("c:\\Users\\ocean\\Downloads\\pexels-anniroenkae-2832382.jpg");
             background-size: cover;
             padding: 20px;
+            text-align: center;
         }
 
         .header-image {
             height: auto;
-            margin-bottom: 20px;
-            width: 90px;
-            text-align: center;
-        }
-
-        img {
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-            height: auto;
+            width: 300px;
         }
 
         .container {
@@ -43,6 +37,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            display: none; /* Initialement caché */
         }
 
         th, td {
@@ -53,11 +48,12 @@
         th {
             background-color: #f4f4f4;
             font-size: 20px;
-            color :rgb(59, 49, 158)
+            color: rgb(59, 49, 158);
         }
 
         .filter {
             margin-bottom: 20px;
+            display: none; /* Initialement caché */
         }
 
         h1 {
@@ -66,12 +62,100 @@
             font-family: Bungee;
             color: rgb(59, 49, 158);
         }
-        
-        tr { 
-            font-size: 20px;
+
+        .toolbar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
         }
 
-        
+        .bubble {
+            background-color: #ddd; /* Couleur de fond par défaut au cas où l'image ne se charge pas */
+            background-size: cover; /* Pour s'assurer que l'image couvre toute la bulle */
+            background-position: center; /* Centre l'image dans la bulle */
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            cursor: pointer;
+            position: relative;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: rgb(72, 22, 133); /* Couleur du texte */
+        }
+
+        /* Styles spécifiques pour chaque bulle */
+        #bubble-film {
+            background-image: url('People of Brooklyn - Shape 5.png'); /* Remplacez par le chemin vers l'image */
+        }
+
+        #bubble-serie {
+            background-image: url('People of Brooklyn - Shape 3.png'); /* Remplacez par le chemin vers l'image */
+        }
+
+        #bubble-podcast {
+            background-image: url('People of Brooklyn - Shape 4.png'); /* Remplacez par le chemin vers l'image */
+        }
+
+        #bubble-livre100mots {
+            background-image: url('People of Brooklyn - Shape Sun.png'); /* Remplacez par le chemin vers l'image */
+        }
+
+        #bubble-livreillustre {
+            background-image: url('People of Brooklyn - Shape 5.png'); /* Remplacez par le chemin vers l'image */
+        }
+
+        #bubble-autre {
+            background-image: url('People of Brooklyn - Shape 3.png'); /* Remplacez par le chemin vers l'image */
+        }
+
+        .bubble:hover .genre-list {
+            display: block;
+        }
+
+        .genre-list {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            width: 150px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            top: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .genre-list div {
+            padding: 5px 0;
+            cursor: pointer;
+        }
+
+        .genre-list div:hover {
+            background-color: #f4f4f4;
+        }
+
+        .back-button {
+            display: none; /* Initialement caché */
+            margin: 20px 0;
+            cursor: pointer;
+            padding: 10px 20px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .back-button:hover {
+            background-color: #ddd;
+        }
     </style>
 </head>
 <body>
@@ -82,13 +166,17 @@
         </div>
     </div>
 
+    <div class="toolbar">
+        <!-- Les bulles des catégories seront insérées ici -->
+    </div>
+
     <div class="filter">
         <label for="categoryFilter">Filtrer par catégorie:</label>
         <select id="categoryFilter">
             <option value="">Tous</option>
             <option value="Film">Film</option>
             <option value="Série">Série</option>
-            <option value="Podcast">Podcast-Balado</option>
+            <option value="Podcast-Balado">Podcast-Balado</option>
             <option value="Livre 100% mots">Livre 100% mots</option>
             <option value="Livre illustré">Livre illustré</option>
             <option value="Autre">Autre</option>
@@ -127,9 +215,60 @@
         </tbody>
     </table>
 
+    <div class="back-button" id="backButton">Retour</div>
+
     <script>
         const SPREADSHEET_ID = '1TRQgrb6aHSnOXjfB_9zTI3zShOixkweE0w2ofOUaNcY'; // Remplacez par l'ID de votre feuille
         const API_KEY = 'AIzaSyCbuRQn0OGJHzUzDMjgyVqPxJQlfVDfKLU'; // Remplacez par votre clé API
+
+        const categories = ['Film', 'Série', 'Podcast-Balado', 'Livre 100% mots', 'Livre illustré', 'Autre'];
+        const genres = {
+            'Film': ['Romance', 'Science-fiction', 'Drame', 'Documentaire', 'Thriller-policier', 'Fantastique', 'Comédie', 'Feel-good', 'Queer'],
+            'Série': ['Romance', 'Science-fiction', 'Drame', 'Documentaire', 'Thriller-policier', 'Fantastique', 'Comédie', 'Feel-good', 'Queer'],
+            'Podcast-Balado': ['Romance', 'Science-fiction', 'Drame', 'Documentaire', 'Thriller-policier', 'Fantastique', 'Comédie', 'Feel-good', 'Queer'],
+            'Livre 100% mots': ['Romance', 'Science-fiction', 'Drame', 'Documentaire', 'Thriller-policier', 'Fantastique', 'Comédie', 'Feel-good', 'Queer'],
+            'Livre illustré': ['Romance', 'Science-fiction', 'Drame', 'Documentaire', 'Thriller-policier', 'Fantastique', 'Comédie', 'Feel-good', 'Queer'],
+            'Autre': ['Romance', 'Science-fiction', 'Drame', 'Documentaire', 'Thriller-policier', 'Fantastique', 'Comédie', 'Feel-good', 'Queer']
+        };
+
+        function generateToolbar() {
+            const toolbar = document.querySelector('.toolbar');
+            toolbar.innerHTML = '';
+
+            categories.forEach(category => {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.id = `bubble-${category.toLowerCase().replace(/\s+/g, '-')}`; // Attribuer un identifiant unique
+                bubble.textContent = category;
+
+                const genreList = document.createElement('div');
+                genreList.className = 'genre-list';
+                genreList.innerHTML = genres[category].map(genre => `<div data-genre="${genre}">${genre}</div>`).join('');
+                bubble.appendChild(genreList);
+
+                bubble.addEventListener('click', () => showTable(category));
+
+                toolbar.appendChild(bubble);
+            });
+        }
+
+        function showTable(category) {
+            document.querySelector('.toolbar').style.display = 'none';
+            document.querySelector('.filter').style.display = 'block';
+            document.querySelector('#dataTable').style.display = 'table';
+            document.querySelector('.back-button').style.display = 'block';
+
+            document.querySelector('#categoryFilter').value = category;
+            document.querySelector('#genreFilter').value = ''; // Réinitialiser le filtre par genre
+            applyFilter();
+        }
+
+        function showToolbar() {
+            document.querySelector('.toolbar').style.display = 'flex';
+            document.querySelector('.filter').style.display = 'none';
+            document.querySelector('#dataTable').style.display = 'none';
+            document.querySelector('.back-button').style.display = 'none';
+        }
 
         function fetchData() {
             const range = 'Sheet1!B:H'; // Plage incluant la colonne des images
@@ -177,7 +316,7 @@
 
             rows.forEach(row => {
                 const categoryCell = row.cells[0] ? row.cells[0].textContent.toLowerCase() : '';
-                const genreCell = row.cells[2] ? row.cells[2].textContent.toLowerCase() : '';
+                const genreCell = row.cells[3] ? row.cells[3].textContent.toLowerCase() : '';
 
                 row.style.display = (categoryFilterValue === '' || categoryCell === categoryFilterValue) &&
                                     (genreFilterValue === '' || genreCell === genreFilterValue) ? '' : 'none';
@@ -186,9 +325,10 @@
 
         document.querySelector('#categoryFilter').addEventListener('change', applyFilter);
         document.querySelector('#genreFilter').addEventListener('change', applyFilter);
+        document.querySelector('#backButton').addEventListener('click', showToolbar);
 
         fetchData(); // Charger les données au chargement de la page
-
+        generateToolbar(); // Générer les bulles au chargement de la page
         setInterval(fetchData, 60000); // Recharger les données toutes les minutes
     </script>
 </body>
